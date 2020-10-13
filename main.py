@@ -10,27 +10,23 @@ import os
 from prettytable import PrettyTable
 import json
 from browsermobproxy import Server
+import argparse
+from Website import websiteDetails
+
+parser= argparse.ArgumentParser()
+parser.add_argument("-redo", "--regenerate", help="Regenerate HAR files")
+
+args= parser.parse_args()
 # https://dzone.com/articles/performance-capture-i-export-har-using-selenium-an
-
-
 
 data=[]
 
 
-class websiteDetails:
-    def __init__(self,name,rank):
-        self.name=str(name)
-        self.rank=int(rank)
-        self.category="undefined"
-        self.server_count=0
-        self.non_origin_count=0
-        self.backend_calc=0
-        self.frontend_calc=0
-        self.reqcode=0
-        self.requests_per_second= 0
+
 
 """Delete previous screenshots and har_data"""
 os.system("rm -rf screenshots/*")
+# if(args.regenerate):
 os.system("rm -rf har_data/*")
 
 
@@ -41,6 +37,8 @@ with open('dataset.csv', mode='r') as csv_file:
     for row in csv_reader:
         data.append(websiteDetails(row["name"],int(row["rank"])))
         line_count += 1
+
+
 
 """Start browsermob-proxy server"""
 # https://stackoverflow.com/questions/48201944/how-to-use-browsermob-with-python-selenium
@@ -73,13 +71,20 @@ for i in range(SIZE):
         proxy.new_har(elem.name)
         driver.get('https://www.'+elem.name)
         
-        with open('har_data/'+elem.name+'.har','w') as har_file:
+        with open('har_data/'+elem.name+'-har.json','w') as har_file:
             json.dump(proxy.har,har_file)
+        
+        jsondata= json.load(open('har_data/'+elem.name+'-har.json'))
+        elem.http_req_count= len(jsondata["log"]["entries"])
 
 driver.quit();
 server.stop();
+
+
+
 # driver.close();
-table= PrettyTable(['Website Name',"Request Code"])
+table= PrettyTable(['Website Name',"Request Code","HTTP Req Made"])
 for i in data[:SIZE]:
-    table.add_row([i.name,i.reqcode])
+    table.add_row([i.name,i.reqcode,i.http_req_count])
 print(table)
+
