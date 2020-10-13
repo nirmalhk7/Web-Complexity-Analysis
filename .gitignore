@@ -2,3 +2,7 @@
 .vscode
 
 screenshots/
+
+browsermob-proxy-2.1.4/
+*.log
+
