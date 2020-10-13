@@ -8,6 +8,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 import time
 import os
 from prettytable import PrettyTable
+import json
+from browsermobproxy import Server
+# https://dzone.com/articles/performance-capture-i-export-har-using-selenium-an
+
 
 
 data=[]
@@ -21,8 +25,10 @@ class websiteDetails:
         self.backend_calc=0
         self.frontend_calc=0
         self.reqcode=0
+        self.requests_per_second= 0
 
 os.system("rm -rf screenshots/*")
+os.system("rm -rf har_data/*")
 with open('dataset.csv', mode='r') as csv_file:
     csv_reader = csv.DictReader(csv_file)
     line_count = 0
@@ -30,39 +36,51 @@ with open('dataset.csv', mode='r') as csv_file:
         data.append(websiteDetails(row["name"],int(row["rank"])))
         line_count += 1
 
+server_port=8090
+server= Server("./browsermob-proxy-2.1.4/bin/browsermob-proxy",options={'port':server_port})
+server.start()
+proxy= server.create_proxy()
+print("browsermob-proxy active on {}".format(proxy.getPort()))
+# https://stackoverflow.com/questions/48201944/how-to-use-browsermob-with-python-selenium
+
 
 options = webdriver.ChromeOptions()
 options.add_argument('headless')
 options.add_argument('window-size=1200x600')
-
-
-
+options.add_argument("--proxy-server={}".format(proxy.proxy))
 SIZE = 5
+
+
 
 for i in range(SIZE):
     elem= data[i]
     print("Testing for",elem.name)
-    elem.reqcode= requests.get("https://www."+elem.name).status_code
+    try:
+        elem.reqcode= requests.get("https://www."+elem.name).status_code
+    except:
+        elem.reqcode="N/A"
+        continue
     if(elem.reqcode==200):
         print("Collecting data for",elem.name)
         driver = webdriver.Chrome(options=options)
         driver.get('https://www.'+elem.name)
-
+        
+    
+        proxy.new_har(elem.name)
+        
 # https://www.lambdatest.com/blog/how-to-measure-page-load-times-with-selenium/
-        navigationStart = driver.execute_script("return window.performance.timing.navigationStart")
-        responseStart = driver.execute_script("return window.performance.timing.responseStart")
-        domComplete = driver.execute_script("return window.performance.timing.domComplete")
-
-        elem.backend_calc= responseStart - navigationStart
-        elem.frontend_calc= domComplete - responseStart
 
         driver.get_screenshot_as_file('screenshots/'+elem.name+'.png')
-        # driver.quit();
-        driver.close();
-        # x=int(input())
 
+        proxy.new_har(elem.name)
+        with open('har_data/'+elem.name+'.har','w') as har_file:
+            json.dump(proxy.har,har_file)
+        driver.quit();
+        
+
+server.stop();
 # driver.close();
-table= PrettyTable(['Website Name','Backend RT',"Frontend RT","Request Code"])
+table= PrettyTable(['Website Name',"Request Code"])
 for i in data[:SIZE]:
-    table.add_row([i.name,i.backend_calc,i.frontend_calc,i.reqcode])
+    table.add_row([i.name,i.reqcode])
 print(table)
