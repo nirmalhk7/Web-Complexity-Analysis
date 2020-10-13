@@ -10,25 +10,27 @@ import os
 from prettytable import PrettyTable
 import json
 from browsermobproxy import Server
+import argparse
+from Website import websiteDetails
+
+parser= argparse.ArgumentParser()
+parser.add_argument("-redo", "--regenerate", help="Regenerate HAR files")
+
+args= parser.parse_args()
 # https://dzone.com/articles/performance-capture-i-export-har-using-selenium-an
 
-
-
 data=[]
-class websiteDetails:
-    def __init__(self,name,rank):
-        self.name=str(name)
-        self.rank=int(rank)
-        self.category="undefined"
-        self.server_count=0
-        self.non_origin_count=0
-        self.backend_calc=0
-        self.frontend_calc=0
-        self.reqcode=0
-        self.requests_per_second= 0
 
+
+
+
+"""Delete previous screenshots and har_data"""
 os.system("rm -rf screenshots/*")
+# if(args.regenerate):
 os.system("rm -rf har_data/*")
+
+
+"""Read CSV file"""
 with open('dataset.csv', mode='r') as csv_file:
     csv_reader = csv.DictReader(csv_file)
     line_count = 0
@@ -36,22 +38,26 @@ with open('dataset.csv', mode='r') as csv_file:
         data.append(websiteDetails(row["name"],int(row["rank"])))
         line_count += 1
 
+
+
+"""Start browsermob-proxy server"""
+# https://stackoverflow.com/questions/48201944/how-to-use-browsermob-with-python-selenium
 server_port=8090
 server= Server("./browsermob-proxy-2.1.4/bin/browsermob-proxy",options={'port':server_port})
 server.start()
 proxy= server.create_proxy()
-print("browsermob-proxy active on {}".format(proxy.getPort()))
-# https://stackoverflow.com/questions/48201944/how-to-use-browsermob-with-python-selenium
+print("browsermob-proxy active on {}".format(server_port))
 
 
+"""Set options for Chrome browser"""
 options = webdriver.ChromeOptions()
-options.add_argument('headless')
-options.add_argument('window-size=1200x600')
+# options.add_argument('headless')
+options.add_argument('ignore-certificate-errors')
 options.add_argument("--proxy-server={}".format(proxy.proxy))
+driver = webdriver.Chrome(chrome_options=options)
+
+
 SIZE = 5
-
-
-
 for i in range(SIZE):
     elem= data[i]
     print("Testing for",elem.name)
@@ -60,27 +66,25 @@ for i in range(SIZE):
     except:
         elem.reqcode="N/A"
         continue
-    if(elem.reqcode==200):
-        print("Collecting data for",elem.name)
-        driver = webdriver.Chrome(options=options)
+    if(200<=elem.reqcode<300):
+        print("Opening ",elem.name)
+        proxy.new_har(elem.name)
         driver.get('https://www.'+elem.name)
         
-    
-        proxy.new_har(elem.name)
-        
-# https://www.lambdatest.com/blog/how-to-measure-page-load-times-with-selenium/
-
-        driver.get_screenshot_as_file('screenshots/'+elem.name+'.png')
-
-        proxy.new_har(elem.name)
-        with open('har_data/'+elem.name+'.har','w') as har_file:
+        with open('har_data/'+elem.name+'-har.json','w') as har_file:
             json.dump(proxy.har,har_file)
-        driver.quit();
         
+        jsondata= json.load(open('har_data/'+elem.name+'-har.json'))
+        elem.http_req_count= len(jsondata["log"]["entries"])
 
+driver.quit();
 server.stop();
+
+
+
 # driver.close();
-table= PrettyTable(['Website Name',"Request Code"])
+table= PrettyTable(['Website Name',"Request Code","HTTP Req Made"])
 for i in data[:SIZE]:
-    table.add_row([i.name,i.reqcode])
+    table.add_row([i.name,i.reqcode,i.http_req_count])
 print(table)
+
