@@ -75,7 +75,16 @@ for i in range(SIZE):
             json.dump(proxy.har,har_file)
         
         jsondata= json.load(open('har_data/'+elem.name+'-har.json'))
-        elem.http_req_count= len(jsondata["log"]["entries"])
+
+        request_arr=jsondata["log"]["entries"]
+        for req in request_arr:
+            elem.req_count["GET"]+=int(req["request"]["method"]=="GET")
+            elem.req_count["POST"]+=int(req["request"]["method"]=="POST")
+            elem.req_count["CONNECT"]+=int(req["request"]["method"]=="CONNECT")
+            elem.req_count["PUT"]+=int(req["request"]["method"]=="PUT")
+            elem.req_count["DELETE"]+=int(req["request"]["method"]=="DELETE")
+    
+            
 
 driver.quit();
 server.stop();
@@ -83,8 +92,8 @@ server.stop();
 
 
 # driver.close();
-table= PrettyTable(['Website Name',"Request Code","HTTP Req Made"])
+table= PrettyTable(['Website Name',"Request Code","GET Req Count","POST Req Count","PUT Req Count","DELETE Req Count","CONNECT Req Count"])
 for i in data[:SIZE]:
-    table.add_row([i.name,i.reqcode,i.http_req_count])
+    table.add_row([i.name,i.reqcode,i.req_count["GET"],i.req_count["POST"],i.req_count["PUT"],i.req_count["DELETE"]])
 print(table)
 

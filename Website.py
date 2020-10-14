@@ -4,5 +4,5 @@ class websiteDetails:
         self.name=str(name)
         self.rank=int(rank)
         self.category=None
-        self.http_req_count=0
         self.reqcode=0
+        self.req_count={"GET":0,"POST":0,"CONNECT":0,"DELETE":0,"PUT":0}
