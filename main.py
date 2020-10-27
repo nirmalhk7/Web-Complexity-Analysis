@@ -1,11 +1,17 @@
 # # Characterizing Webpage Complexity and Its Impact
 
+# onContentLoad- time taken to start rendering content
+# onLoad- time taken to completely render all components on page
+# number of objects loaded
+# number of servers contacted
+
 import csv
 import requests
 from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
 import time
+import random
 import os
 from prettytable import PrettyTable
 import json
@@ -27,7 +33,7 @@ data=[]
 """Delete previous screenshots and har_data"""
 os.system("rm -rf screenshots/*")
 # if(args.regenerate):
-os.system("rm -rf har_data/*")
+# os.system("rm -rf har_data/*")
 
 
 """Read CSV file"""
@@ -51,14 +57,19 @@ print("browsermob-proxy active on {}".format(server_port))
 
 """Set options for Chrome browser"""
 options = webdriver.ChromeOptions()
-# options.add_argument('headless')
+options.add_argument('headless')
 options.add_argument('ignore-certificate-errors')
 options.add_argument("--proxy-server={}".format(proxy.proxy))
 driver = webdriver.Chrome(chrome_options=options)
 
+random.shuffle(data)
 
-SIZE = 5
-for i in range(SIZE):
+SIZE = 3
+i=-1
+valid200=0
+
+while True:
+    i+=1
     elem= data[i]
     print("Testing for",elem.name)
     try:
@@ -67,10 +78,13 @@ for i in range(SIZE):
         elem.reqcode="N/A"
         continue
     if(200<=elem.reqcode<300):
+        if(valid200>=SIZE):
+            break;
+        valid200+=1
         print("Opening ",elem.name)
         proxy.new_har(elem.name)
         driver.get('https://www.'+elem.name)
-        
+        driver.implicitly_wait(5)
         with open('har_data/'+elem.name+'-har.json','w') as har_file:
             json.dump(proxy.har,har_file)
         
@@ -80,10 +94,9 @@ for i in range(SIZE):
         for req in request_arr:
             elem.req_count["GET"]+=int(req["request"]["method"]=="GET")
             elem.req_count["POST"]+=int(req["request"]["method"]=="POST")
-            elem.req_count["CONNECT"]+=int(req["request"]["method"]=="CONNECT")
-            elem.req_count["PUT"]+=int(req["request"]["method"]=="PUT")
-            elem.req_count["DELETE"]+=int(req["request"]["method"]=="DELETE")
-    
+            # elem.req_count["PUT"]+=int(req["request"]["method"]=="PUT")
+            # elem.req_count["DELETE"]+=int(req["request"]["method"]=="DELETE")
+        
             
 
 driver.quit();
@@ -92,8 +105,22 @@ server.stop();
 
 
 # driver.close();
-table= PrettyTable(['Website Name',"Request Code","GET Req Count","POST Req Count","PUT Req Count","DELETE Req Count","CONNECT Req Count"])
+
+csv_rows=[]
+csv_head=['Website Name',"Request Code","GET Req Count","POST Req Count"]
+table= PrettyTable(csv_head)
 for i in data[:SIZE]:
-    table.add_row([i.name,i.reqcode,i.req_count["GET"],i.req_count["POST"],i.req_count["PUT"],i.req_count["DELETE"]])
+    details=[i.name,i.reqcode,i.req_count["GET"],i.req_count["POST"]]
+    table.add_row(details)
+    csv_rows.append(details)
 print(table)
 
+with open('./output.csv', 'w') as csvfile:  
+    # creating a csv writer object  
+    csvwriter = csv.writer(csvfile)  
+        
+    # writing the fields  
+    csvwriter.writerow(csv_head)  
+        
+    # writing the data rows  
+    csvwriter.writerows(csv_rows)
