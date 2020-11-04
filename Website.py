@@ -6,3 +6,4 @@ class websiteDetails:
         self.category=None
         self.reqcode=0
         self.req_count={"GET":0,"POST":0,"CONNECT":0,"DELETE":0,"PUT":0}
+        self.requestDetails=[]
