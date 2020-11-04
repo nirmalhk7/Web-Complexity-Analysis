@@ -133,7 +133,7 @@ while SIZE > 0:
         }
     )
     with open("./output.json", "w") as jsonFile:
-        json.dump(output_data, jsonFile)
+        json.dump(output_data, jsonFile,indent=4)
     table.add_row([elem.rank, elem.name, elem.category, elem.reqcode])
 
 driver.quit()
