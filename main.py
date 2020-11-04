@@ -41,10 +41,12 @@ with open("dataset.csv", mode="r") as csv_file:
     csv_reader = csv.DictReader(csv_file)
     line_count = 0
     for row in csv_reader:
+        if(line_count>500000-random.randint(0,250000)):
+            break
         data.append(websiteDetails(row["name"], int(row["rank"])))
         line_count += 1
 
-
+print("Dataset size {}".format(len(data)))
 """Start browsermob-proxy server"""
 # https://stackoverflow.com/questions/48201944/how-to-use-browsermob-with-python-selenium
 server_port = 8090
@@ -84,24 +86,25 @@ SIZE = int(args.count or 5)
 while SIZE > 0:
     i += 1
     elem = data[i]
-    print("Testing for", elem.name)
+    print("{}: Checking request status".format(elem.name))
     try:
         elem.reqcode = requests.get("https://www." + elem.name).status_code
     except:
-        print("Failed for https://www." + elem.name, elem.reqcode)
+        print("{}: Failed {}".format(elem.name, elem.reqcode))
         elem.reqcode = elem.category = "N/A"
         elem.req_count["POST"] = elem.req_count["GET"] = 0
     elem.category = "Unclassified"
     if elem.reqcode != "N/A":
+        
         if 200 <= elem.reqcode < 300:
-            print(SIZE, "Opening ", elem.name, elem.reqcode)
+            print("{}: Opening with request code {}".format(elem.name, elem.reqcode))
             proxy.new_har(elem.name)
             try:
                 driver.get("https://www." + elem.name)
                 driver.implicitly_wait(5)
                 with open("har_data/" + elem.name + "-har.json", "w") as har_file:
                     json.dump(proxy.har, har_file)
-                print("Dumped HAR file",elem.name)
+                print("{}: Dumped HAR file".format(elem.name))
                 jsondata = json.load(open("har_data/" + elem.name + "-har.json"))
                 elem.category = getCategory("www." + elem.name, driver_category)
                 request_arr = jsondata["log"]["entries"]
@@ -117,9 +120,11 @@ while SIZE > 0:
                         }
                     )
                 SIZE -= 1
-                print("Parsed Req-Res details",elem.name)
+                print("{}: Parsed Req-Res details".format(elem.name))
             except Exception as e:
                 print(e)
+        else:
+            print("{}: Not considered because of non-200 code".format(elem.name))
     # details =
     with open("output.json", "r") as jsonFile:
         output_data = json.load(jsonFile)
@@ -132,17 +137,17 @@ while SIZE > 0:
             "reqdetails": elem.requestDetails,
         }
     )
+    print("{}: Writing data. Please dont kill now ...".format(elem.name))
     with open("./output.json", "w") as jsonFile:
         json.dump(output_data, jsonFile,indent=4)
     table.add_row([elem.rank, elem.name, elem.category, elem.reqcode])
+    print("{}: Completed".format(elem.name))
 
 driver.quit()
 server.stop()
 
 print(table)
-
 print("")
-print(len(json.load(open("./output.json"))),"websites already pinged.")
 
 # with open('./output.csv', 'a') as csvfile:
 #     # creating a csv writer object
