@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 def getCategory(url,driver):
     category="Unclassified"
     try:
-        print("Querying for ",url)
+        print("{}: Querying Category ".format(url.split('www.')[1]))
         driver.get('https://sitereview.bluecoat.com/#/lookup-result/'+url)
         driver.implicitly_wait(5)
         category= driver.find_elements_by_class_name('clickable-category')[0].get_attribute("textContent")

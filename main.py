@@ -23,6 +23,7 @@ import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--count", help="Count of website to generate data for")
+parser.add_argument("-r","--random", help="Randomise Database")
 
 args = parser.parse_args()
 # https://dzone.com/articles/performance-capture-i-export-har-using-selenium-an
@@ -67,8 +68,9 @@ driver_category = webdriver.Chrome(options=options)
 options.add_argument("--proxy-server={}".format(proxy.proxy))
 driver = webdriver.Chrome(options=options)
 driver.set_page_load_timeout(60)
-random.shuffle(data)
-print("Data randomised")
+if(not args.random or (args.random and args.random.lower()!='false')):
+    random.shuffle(data)
+    print("Data randomised")
 
 json_arr = []
 csv_head = [
@@ -141,15 +143,11 @@ while SIZE > 0:
     with open("./output.json", "w") as jsonFile:
         json.dump(output_data, jsonFile,indent=4)
     table.add_row([elem.rank, elem.name, elem.category, elem.reqcode])
-    print("{}: Completed".format(elem.name))
+    print("{}: Completed writing data. {} websites to go.".format(elem.name,SIZE))
 
 driver.quit()
 server.stop()
+print("Stopped ChromeDriver and Browsermob server.")
 
 print(table)
 print("")
-
-# with open('./output.csv', 'a') as csvfile:
-#     # creating a csv writer object
-#     csvwriter = csv.writer(csvfile)
-#     csvwriter.writerows(csv_rows)

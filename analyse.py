@@ -14,11 +14,16 @@ info = {
     "Average Rank":0
 }
 webdetails={}
+webcategory={}
 for site in websites:
     try:
         webdetails[site["name"]]+=1
     except:
         webdetails[site["name"]]=1
+    try:
+        webcategory[site["category"]]+=1
+    except:
+        webcategory[site["category"]]=1
     if(site["category"]=="Unclassified"):
         if(site["reqcode"]=="N/A"):
             info["Unclassified and Unavailable (Not 200)"]+=1
@@ -35,4 +40,8 @@ for site in websites:
 
 info["Average Rank"]//=count
 for t in info.keys():
-    print(t+" : {}".format(info[t]))
+    print("{} : {}".format(t,info[t]))
+
+print("\nCategory-wise splitup:")
+for t in webcategory.keys():
+    print("{}: {}".format(t,webcategory[t]))
