@@ -5,6 +5,7 @@
 # number of objects loaded
 # number of servers contacted
 
+import os
 import csv
 import requests
 from selenium import webdriver
@@ -12,7 +13,6 @@ from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.support.ui import WebDriverWait
 import time
 import random
-import os
 from prettytable import PrettyTable
 import json
 from browsermobproxy import Server
@@ -29,6 +29,7 @@ args = parser.parse_args()
 # https://dzone.com/articles/performance-capture-i-export-har-using-selenium-an
 print("Arguments passed", args)
 data = []
+
 
 
 """Delete previous screenshots and har_data"""

@@ -1,5 +1,7 @@
 import json
 from prettytable import PrettyTable
+from subprocess import Popen, PIPE
+
 
 with open("./output.json") as file:
     websites = json.load(file)
@@ -26,12 +28,12 @@ for site in websites:
     except:
         webcategory[site["category"]]=1
     if(site["category"]=="Unclassified"):
-        if(site["reqcode"]=="N/A"):
+        if(site["reqcode"]=="N/A" or len(site["reqdetails"])==0):
             info["Unclassified and Unavailable (Not 200)"]+=1
         else:
             info["Unclassified but Available"]+=1
     else:
-        if(site["reqcode"]=="N/A"):
+        if(site["reqcode"]=="N/A" or len(site["reqdetails"])==0):
             info["Classified but Unavailable (Not 200)"]+=1
         else:
             info["Classified and Available"]+=1
@@ -42,11 +44,14 @@ for site in websites:
 
 
 info["Average Rank"]//=count
-for t in info.keys():
-    print("{} : {}".format(t,info[t]))
-
 print("\nCategory-wise splitup:")
 for t in webcategory.keys():
     print("{}: {}".format(t,webcategory[t]))
+
+print("")
+for t in info.keys():
+    print("{} : {}".format(t,info[t]))
+
+
 
 print("")
