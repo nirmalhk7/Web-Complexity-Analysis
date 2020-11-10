@@ -6,7 +6,7 @@ from subprocess import Popen, PIPE
 with open("./output.json") as file:
     websites = json.load(file)
 count=len(websites)
-print("{} websites scanned".format(count))
+
 info = {
     "Unclassified but Available": 0,
     "Classified but Unavailable (Not 200)": 0,
@@ -15,6 +15,7 @@ info = {
     "Repeated Websites":0,
     "Average Rank":0
 }
+
 webdetails={}
 webcategory={}
 mime_used={}
@@ -45,7 +46,7 @@ for site in websites:
 
 info["Average Rank"]//=count
 print("\nCategory-wise splitup:")
-for t in webcategory.keys():
+for t in sorted(webcategory.keys()):
     print("{}: {}".format(t,webcategory[t]))
 
 print("")
@@ -55,3 +56,4 @@ for t in info.keys():
 
 
 print("")
+print("{} websites scanned\n".format(count))
