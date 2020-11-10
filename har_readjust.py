@@ -105,4 +105,5 @@ for s in has_har:
         counter-=1
         inp_count+=1
 
+
 print(table)
