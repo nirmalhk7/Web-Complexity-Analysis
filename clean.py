@@ -1,5 +1,4 @@
 import json
-import statistics
 
 def cleanArr(websites):
     new_websites = []

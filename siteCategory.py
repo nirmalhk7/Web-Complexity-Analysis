@@ -11,7 +11,7 @@ def getCategory(url,driver):
         driver.implicitly_wait(5)
         category= driver.find_elements_by_class_name('clickable-category')[0].get_attribute("textContent")
     except Exception as e:
-        print("siteCategory",e)
+        print("siteCategory",e,url)
     return category
 
 if __name__ == "__main__":
