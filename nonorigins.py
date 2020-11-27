@@ -57,9 +57,9 @@ def parseNonOrigins():
                 print("{}: Categorized as {}".format(k,category))
                 print("{}: Writing to file ....".format(k))
                 try:
-                    nonorigin[k]={"probability":round(v/totalCount,4),"rank":data[k],"category":category}
+                    nonorigin[k]={"probability":round(v/totalCount,4),"rank":data[k],"category":category,'found_count':v}
                 except:
-                    nonorigin[k]={"probability":round(v/totalCount,4),"rank":"N/A","category":category}
+                    nonorigin[k]={"probability":round(v/totalCount,4),"rank":"N/A","category":category,'found_count':v}
                 with open("./nonorigin.json", "w") as jsonFile:
                     json.dump(nonorigin, jsonFile, indent=4)
         
@@ -95,6 +95,7 @@ def analyseNonOrigins_1():
     for no in no_data:
         no_data_arr.append([no_data[no]['rank'],no,int(no_data[no]['probability']*totalCount),no_data[no]['category']])
     print(no_data_arr)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--parse", help="Count of website to generate data for")
