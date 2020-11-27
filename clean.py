@@ -56,7 +56,6 @@ def cleanArr(websites):
         new_websites.append(site)
     for i,site in enumerate(new_websites):
         rank_arr.append((site["rank"], i))
-        print(i,site['name'])
     return new_websites, mime_list, category, rank_arr
 
 
