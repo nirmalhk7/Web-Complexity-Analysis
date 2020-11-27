@@ -92,7 +92,7 @@ def analyseNonOrigins_1():
     with open("nonorigin.json", "r") as jsonFile:
         no_data = json.load(jsonFile)
     no_data_arr=[['Rank','Name','Number of Sites','Types']]
-    for no in no_data:
+    for no in no_data.keys():
         no_data_arr.append([no_data[no]['rank'],no,int(no_data[no]['probability']*totalCount),no_data[no]['category']])
     print(no_data_arr)
 

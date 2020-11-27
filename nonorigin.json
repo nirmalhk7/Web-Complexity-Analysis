@@ -1,0 +1,230 @@
+{
+    "gstatic.com": {
+        "probability": 0.0663,
+        "rank": 720,
+        "category": "Search Engines/Portals",
+        "found_count": 529
+    },
+    "google.com": {
+        "probability": 0.0476,
+        "rank": 1,
+        "category": "Search Engines/Portals",
+        "found_count": 380
+    },
+    "googleapis.com": {
+        "probability": 0.0366,
+        "rank": 968,
+        "category": "Technology/Internet",
+        "found_count": 292
+    },
+    "google-analytics.com": {
+        "probability": 0.0356,
+        "rank": 50,
+        "category": "Web Ads/Analytics",
+        "found_count": 284
+    },
+    "googlesyndication.com": {
+        "probability": 0.0303,
+        "rank": 93,
+        "category": "Web Ads/Analytics",
+        "found_count": 242
+    },
+    "twimg.com": {
+        "probability": 0.0296,
+        "rank": 307,
+        "category": "Content Delivery Networks",
+        "found_count": 236
+    },
+    "doubleclick.net": {
+        "probability": 0.0281,
+        "rank": 19,
+        "category": "Web Ads/Analytics",
+        "found_count": 224
+    },
+    "google.co.in": {
+        "probability": 0.0271,
+        "rank": 95,
+        "category": "Search Engines/Portals",
+        "found_count": 216
+    },
+    "facebook.net": {
+        "probability": 0.0237,
+        "rank": 178,
+        "category": "Social Networking",
+        "found_count": 189
+    },
+    "googletagmanager.com": {
+        "probability": 0.0234,
+        "rank": 21,
+        "category": "Web Ads/Analytics",
+        "found_count": 187
+    },
+    "youtube.com": {
+        "probability": 0.0192,
+        "rank": 3,
+        "category": "Audio/Video Clips",
+        "found_count": 153
+    },
+    "cloudfront.net": {
+        "probability": 0.0167,
+        "rank": 202,
+        "category": "Content Delivery Networks",
+        "found_count": 133
+    },
+    "fbcdn.net": {
+        "probability": 0.016,
+        "rank": 45,
+        "category": "Content Delivery Networks",
+        "found_count": 128
+    },
+    "facebook.com": {
+        "probability": 0.0152,
+        "rank": 2,
+        "category": "Social Networking",
+        "found_count": 121
+    },
+    "googleadservices.com": {
+        "probability": 0.0119,
+        "rank": 91,
+        "category": "Technology/Internet",
+        "found_count": 95
+    },
+    "squarespace-cdn.com": {
+        "probability": 0.0117,
+        "rank": 6740,
+        "category": "Content Delivery Networks",
+        "found_count": 93
+    },
+    "wp.com": {
+        "probability": 0.0114,
+        "rank": 138,
+        "category": "Content Delivery Networks",
+        "found_count": 91
+    },
+    "twitter.com": {
+        "probability": 0.011,
+        "rank": 5,
+        "category": "Social Networking",
+        "found_count": 88
+    },
+    "cloudflare.com": {
+        "probability": 0.0109,
+        "rank": 92,
+        "category": "Content Delivery Networks",
+        "found_count": 87
+    },
+    "shopify.com": {
+        "probability": 0.0109,
+        "rank": 342,
+        "category": "Shopping",
+        "found_count": 87
+    },
+    "yandex.ru": {
+        "probability": 0.0103,
+        "rank": 96,
+        "category": "Search Engines/Portals",
+        "found_count": 82
+    },
+    "googletagservices.com": {
+        "probability": 0.0093,
+        "rank": 281,
+        "category": "Web Ads/Analytics",
+        "found_count": 74
+    },
+    "irishexaminer.com": {
+        "probability": 0.0092,
+        "rank": 6035,
+        "category": "News",
+        "found_count": 73
+    },
+    "vaguel.com": {
+        "probability": 0.009,
+        "rank": 262791,
+        "category": "Business/Economy",
+        "found_count": 72
+    },
+    "qhimg.com": {
+        "probability": 0.0087,
+        "rank": 6828,
+        "category": "Content Delivery Networks",
+        "found_count": 69
+    },
+    "baidu.com": {
+        "probability": 0.0084,
+        "rank": 10,
+        "category": "Search Engines/Portals",
+        "found_count": 67
+    },
+    "anwbcamping.nl": {
+        "probability": 0.008,
+        "rank": 288490,
+        "category": "Travel",
+        "found_count": 64
+    },
+    "imgix.net": {
+        "probability": 0.0074,
+        "rank": 2816,
+        "category": "Content Delivery Networks",
+        "found_count": 59
+    },
+    "fontawesome.com": {
+        "probability": 0.0066,
+        "rank": 761,
+        "category": "Technology/Internet",
+        "found_count": 53
+    },
+    "businessinsider.nl": {
+        "probability": 0.0064,
+        "rank": 24685,
+        "category": "News",
+        "found_count": 51
+    },
+    "amazonaws.com": {
+        "probability": 0.0061,
+        "rank": 39,
+        "category": "Technology/Internet",
+        "found_count": 49
+    },
+    "hackensackmeridianhealth.org": {
+        "probability": 0.0058,
+        "rank": 94746,
+        "category": "Health",
+        "found_count": 46
+    },
+    "ytimg.com": {
+        "probability": 0.0056,
+        "rank": 59,
+        "category": "Content Delivery Networks",
+        "found_count": 45
+    },
+    "countryflags.io": {
+        "probability": 0.0056,
+        "rank": 180807,
+        "category": "Content Delivery Networks",
+        "found_count": 45
+    },
+    "parastorage.com": {
+        "probability": 0.0055,
+        "rank": 11803,
+        "category": "Content Delivery Networks",
+        "found_count": 44
+    },
+    "proyectoclubes.com": {
+        "probability": 0.0051,
+        "rank": "N/A",
+        "category": "Unclassified",
+        "found_count": 41
+    },
+    "addthis.com": {
+        "probability": 0.005,
+        "rank": 211,
+        "category": "Web Ads/Analytics",
+        "found_count": 40
+    },
+    "infibeam.com": {
+        "probability": 0.005,
+        "rank": 71245,
+        "category": "Shopping",
+        "found_count": 40
+    }
+}
