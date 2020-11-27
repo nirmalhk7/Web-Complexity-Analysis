@@ -18,7 +18,8 @@ def cleanArr(websites):
             except:
                 category[site["category"]] = 1
             detail_arr = []
-            rank_arr.append((site["rank"], index))
+            # print(index,site["name"],websites[index]['name'])
+            # rank_arr.append((site["rank"], index))
             for detail in site["reqdetails"]:
                 detail["mimeType"] = detail["mimeType"].split(";")[0]
                 if detail["mimeType"]:
@@ -53,6 +54,9 @@ def cleanArr(websites):
                     detail_arr.append(detail)
             site["reqdetails"] = detail_arr
         new_websites.append(site)
+    for i,site in enumerate(new_websites):
+        rank_arr.append((site["rank"], i))
+        print(i,site['name'])
     return new_websites, mime_list, category, rank_arr
 
 
